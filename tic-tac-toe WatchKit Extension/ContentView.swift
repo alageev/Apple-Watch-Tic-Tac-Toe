@@ -1,0 +1,206 @@
+//
+//  ContentView.swift
+//  tic-tac-toe WatchKit Extension
+//
+//  Created by Алексей Агеев on 07.06.2020.
+//  Copyright © 2020 Alexey Ageev. All rights reserved.
+//
+
+import SwiftUI
+
+enum press: UInt8 {
+    case nobody = 0
+    case player = 1
+    case computer = 2
+}
+
+struct ContentView: View {
+    
+    @State var cells : [[press]] = [
+        [.nobody, .nobody, .nobody],
+        [.nobody, .nobody, .nobody],
+        [.nobody, .nobody, .nobody]
+    ]
+    @State var ended : press = .nobody
+    @State var alertIsVisible = false
+    
+    var body: some View {
+        VStack {
+            ForEach(0...2, id: \.self){ i in
+                HStack {
+                    ForEach(0...2, id: \.self){ j in
+                        Button(action: {
+                            if (self.cells[i][j] == .nobody){
+                                self.cells[i][j] = .player
+                                self.check()
+                                if !self.alertIsVisible {
+                                    self.move()
+                                    self.check()
+                                }
+                            }
+                        }) {
+                            if self.cells[i][j] == .nobody {
+                                Text("")
+                            } else if self.cells[i][j] == .player {
+                                Text("✕")
+                            } else {
+                                Text("○")
+                            }
+                        }
+                        .alert(isPresented: self.$alertIsVisible) {
+                            var winner = "Tie!"
+                            if self.ended == .player {
+                                winner = "You win!"
+                            } else if self.ended == .computer {
+                                winner = "Computer wins!"
+                            }
+                            return Alert(title: Text(winner), message: Text("New game?"), dismissButton: .default(Text("Sure!")){
+                                self.ended = .nobody
+                                for i in 0...2 {
+                                    for j in 0...2 {
+                                        self.cells[i][j] = .nobody
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        }
+        .navigationBarTitle("Tic Tac Toe")
+    }
+    
+    func check () {
+        var fieldIsFull = true
+        for i in 0...2 {
+            for j in 0...2 {
+                if cells[i][j] == .nobody {
+                    fieldIsFull = false
+                }
+            }
+        }
+        if fieldIsFull {
+            ended = .nobody
+            alertIsVisible = true
+            return
+        }
+        
+        for i in 0...2 {
+            if cells[i][0] != .nobody && cells[i][0] == cells[i][1] && cells[i][1] == cells[i][2] {
+                ended = cells[i][0]
+                alertIsVisible = true
+                return
+            }
+            if cells[0][i] != .nobody && cells[0][i] == cells[1][i] && cells[1][i] == cells[2][i] {
+                ended = cells[0][i]
+                alertIsVisible = true
+                return
+            }
+        }
+        if cells[0][0] != .nobody && cells[0][0] == cells[1][1] && cells[1][1] == cells[2][2] {
+            ended = cells[0][0]
+            alertIsVisible = true
+            return
+        }
+        if cells[0][2] != .nobody && cells[0][2] == cells[1][1] && cells[1][1] == cells[2][0] {
+            ended = cells[0][2]
+            alertIsVisible = true
+            return
+        }
+    }
+    
+    func move () {
+        var filled = true
+        for i in 0...2 {
+            for j in 0...2 {
+                if cells[i][j] == .nobody {
+                    filled = false
+                    break
+                }
+            }
+        }
+        if filled {
+            ended = .nobody
+            alertIsVisible = true
+            return
+        }
+        for i in 0...2 {
+            //checking rows
+            if cells[i][2] == .nobody && cells[i][0] != .nobody && cells[i][0] == cells[i][1] {
+                cells[i][2] = .computer
+                return
+            }
+            if cells[i][1] == .nobody && cells[i][0] != .nobody && cells[i][0] == cells[i][2] {
+                cells[i][1] = .computer
+                return
+            }
+            if cells[i][0] == .nobody && cells[i][1] != .nobody && cells[i][1] == cells[i][2] {
+                cells[i][0] = .computer
+                return
+            }
+            
+            //checking columns
+            if cells[2][i] == .nobody && cells[0][i] != .nobody && cells[0][i] == cells[1][i] {
+                cells[2][i] = .computer
+                return
+            }
+            if cells[1][i] == .nobody && cells[0][i] != .nobody && cells[0][i] == cells[2][i] {
+                cells[1][i] = .computer
+                return
+            }
+            if cells[0][i] == .nobody && cells[1][i] != .nobody && cells[1][i] == cells[2][i] {
+                cells[0][i] = .computer
+                return
+            }
+        }
+        //checking main diagonal
+        if cells[2][2] == .nobody && cells[0][0] != .nobody && cells[0][0] == cells[1][1] {
+            cells[2][2] = .computer
+            return
+        }
+        if cells[1][1] == .nobody && cells[0][0] != .nobody && cells[0][0] == cells[2][2] {
+            cells[1][1] = .computer
+            return
+        }
+        if cells[0][0] == .nobody && cells[1][1] != .nobody && cells[1][1] == cells[2][2] {
+            cells[0][0] = .computer
+            return
+        }
+        //checking another diagonal
+        if cells[2][0] == .nobody && cells[0][2] != .nobody && cells[0][2] == cells[1][1] {
+            cells[2][0] = .computer
+            return
+        }
+        if cells[1][1] == .nobody && cells[0][2] != .nobody && cells[0][2] == cells[2][0] {
+            cells[1][1] = .computer
+            return
+        }
+        if cells[2][0] == .nobody && cells[0][2] != .nobody && cells[0][2] == cells[1][1] {
+            cells[2][0] = .computer
+            return
+        }
+        
+        var computerMoved = false
+        
+        while !computerMoved {
+            let row = Int.random(in: 0...2)
+            let col = Int.random(in: 0...2)
+            if cells[row][col] == .nobody {
+                computerMoved = true
+                cells[row][col] = .computer
+            }
+        }
+    }
+}
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            ContentView().previewDevice("Apple Watch Series 2 - 38mm")
+            ContentView().previewDevice("Apple Watch Series 2 - 42mm")
+            ContentView().previewDevice("Apple Watch Series 4 - 40mm")
+            ContentView().previewDevice("Apple Watch Series 4 - 44mm")
+        }
+    }
+}
