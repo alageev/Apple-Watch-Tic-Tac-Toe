@@ -63,7 +63,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6F51888A248D70FF00F2AB4A /* tictactoeTESTS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tictactoeTESTS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F597495248D3FDF002CD65F /* tic-tac-toe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tic-tac-toe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F597499248D3FDF002CD65F /* tic-tac-toe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tic-tac-toe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F59749F248D3FDF002CD65F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
@@ -82,13 +81,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		6F518887248D70FF00F2AB4A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6F5974A5248D3FE2002CD65F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -114,7 +106,6 @@
 				6F597495248D3FDF002CD65F /* tic-tac-toe.app */,
 				6F597499248D3FDF002CD65F /* tic-tac-toe.app */,
 				6F5974A8248D3FE2002CD65F /* tic-tac-toe WatchKit Extension.appex */,
-				6F51888A248D70FF00F2AB4A /* tictactoeTESTS.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,23 +147,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6F518889248D70FF00F2AB4A /* tictactoeTESTS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6F518891248D70FF00F2AB4A /* Build configuration list for PBXNativeTarget "tictactoeTESTS" */;
-			buildPhases = (
-				6F518886248D70FF00F2AB4A /* Sources */,
-				6F518887248D70FF00F2AB4A /* Frameworks */,
-				6F518888248D70FF00F2AB4A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = tictactoeTESTS;
-			productName = tictactoeTESTS;
-			productReference = 6F51888A248D70FF00F2AB4A /* tictactoeTESTS.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		6F597494248D3FDF002CD65F /* tic-tac-toe */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6F5974C8248D3FE2002CD65F /* Build configuration list for PBXNativeTarget "tic-tac-toe" */;
@@ -234,9 +208,6 @@
 				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Alexey Ageev";
 				TargetAttributes = {
-					6F518889248D70FF00F2AB4A = {
-						CreatedOnToolsVersion = 11.5;
-					};
 					6F597494248D3FDF002CD65F = {
 						CreatedOnToolsVersion = 11.5;
 					};
@@ -264,19 +235,11 @@
 				6F597494248D3FDF002CD65F /* tic-tac-toe */,
 				6F597498248D3FDF002CD65F /* tic-tac-toe WatchKit App */,
 				6F5974A7248D3FE2002CD65F /* tic-tac-toe WatchKit Extension */,
-				6F518889248D70FF00F2AB4A /* tictactoeTESTS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		6F518888248D70FF00F2AB4A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6F597493248D3FDF002CD65F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -305,13 +268,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		6F518886248D70FF00F2AB4A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6F5974A4248D3FE2002CD65F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -351,44 +307,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		6F51888F248D70FF00F2AB4A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 94U9UR9TXD;
-				INFOPLIST_FILE = tictactoeTESTS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alageev.tictactoeTESTS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		6F518890248D70FF00F2AB4A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 94U9UR9TXD;
-				INFOPLIST_FILE = tictactoeTESTS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alageev.tictactoeTESTS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		6F5974BE248D3FE2002CD65F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -616,15 +534,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6F518891248D70FF00F2AB4A /* Build configuration list for PBXNativeTarget "tictactoeTESTS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6F51888F248D70FF00F2AB4A /* Debug */,
-				6F518890248D70FF00F2AB4A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		6F597492248D3FDF002CD65F /* Build configuration list for PBXProject "tic-tac-toe" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

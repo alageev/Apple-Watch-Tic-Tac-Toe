@@ -15,13 +15,13 @@ enum press: UInt8 {
 }
 
 struct ContentView: View {
-    
+    @State var playerFirst : Bool = true
     @State var cells : [[press]] = [
         [.nobody, .nobody, .nobody],
         [.nobody, .nobody, .nobody],
         [.nobody, .nobody, .nobody]
     ]
-    @State var ended : press = .nobody
+    @State var winner : press = .nobody
     @State var alertIsVisible = false
     
     var body: some View {
@@ -42,20 +42,33 @@ struct ContentView: View {
                             if self.cells[i][j] == .nobody {
                                 Text("")
                             } else if self.cells[i][j] == .player {
-                                Text("✕")
+                                if self.playerFirst {
+                                    Text("✕")
+                                } else {
+                                    Text("○")
+                                }
                             } else {
-                                Text("○")
+                                if self.playerFirst {
+                                    Text("○")
+                                } else {
+                                    Text("✕")
+                                }
                             }
                         }
                         .alert(isPresented: self.$alertIsVisible) {
-                            var winner = "Tie!"
-                            if self.ended == .player {
+                            var winner : String
+                            if self.winner == .player {
                                 winner = "You win!"
-                            } else if self.ended == .computer {
+                                WKInterfaceDevice().play(.success)
+                            } else if self.winner == .computer {
                                 winner = "Computer wins!"
+                                WKInterfaceDevice().play(.failure)
+                            } else {
+                                winner = "Tie!"
+                                WKInterfaceDevice().play(.retry)
                             }
                             return Alert(title: Text(winner), message: Text("New game?"), dismissButton: .default(Text("Sure!")){
-                                self.ended = .nobody
+                                self.winner = .nobody
                                 for i in 0...2 {
                                     for j in 0...2 {
                                         self.cells[i][j] = .nobody
@@ -67,6 +80,12 @@ struct ContentView: View {
                 }
             }
         }
+        .onAppear(perform: {
+            self.playerFirst = Bool.random()
+            if !self.playerFirst {
+                self.move()
+            }
+        })
         .navigationBarTitle("Tic Tac Toe")
     }
     
@@ -76,107 +95,148 @@ struct ContentView: View {
             for j in 0...2 {
                 if cells[i][j] == .nobody {
                     fieldIsFull = false
+                    break
                 }
             }
         }
         if fieldIsFull {
-            ended = .nobody
+            winner = .nobody
             alertIsVisible = true
             return
         }
         
         for i in 0...2 {
             if cells[i][0] != .nobody && cells[i][0] == cells[i][1] && cells[i][1] == cells[i][2] {
-                ended = cells[i][0]
+                winner = cells[i][0]
                 alertIsVisible = true
                 return
             }
             if cells[0][i] != .nobody && cells[0][i] == cells[1][i] && cells[1][i] == cells[2][i] {
-                ended = cells[0][i]
+                winner = cells[0][i]
                 alertIsVisible = true
                 return
             }
         }
         if cells[0][0] != .nobody && cells[0][0] == cells[1][1] && cells[1][1] == cells[2][2] {
-            ended = cells[0][0]
+            winner = cells[0][0]
             alertIsVisible = true
             return
         }
         if cells[0][2] != .nobody && cells[0][2] == cells[1][1] && cells[1][1] == cells[2][0] {
-            ended = cells[0][2]
+            winner = cells[0][2]
             alertIsVisible = true
             return
         }
     }
     
     func move () {
-        var filled = true
-        for i in 0...2 {
-            for j in 0...2 {
-                if cells[i][j] == .nobody {
-                    filled = false
-                    break
-                }
-            }
-        }
-        if filled {
-            ended = .nobody
-            alertIsVisible = true
-            return
-        }
+        var placesToStop: [[UInt8]] = []
         for i in 0...2 {
             //checking rows
             if cells[i][2] == .nobody && cells[i][0] != .nobody && cells[i][0] == cells[i][1] {
-                cells[i][2] = .computer
-                return
+                if cells[i][0] == .computer {
+                    cells[i][2] = .computer
+                    return
+                } else {
+                    placesToStop.append([UInt8(i), 2])
+                }
             }
             if cells[i][1] == .nobody && cells[i][0] != .nobody && cells[i][0] == cells[i][2] {
-                cells[i][1] = .computer
-                return
+                if cells[i][0] == .computer {
+                    cells[i][1] = .computer
+                    return
+                } else {
+                    placesToStop.append([UInt8(i), 1])
+                }
             }
             if cells[i][0] == .nobody && cells[i][1] != .nobody && cells[i][1] == cells[i][2] {
-                cells[i][0] = .computer
-                return
+                if cells[i][1] == .computer {
+                    cells[i][0] = .computer
+                    return
+                } else {
+                    placesToStop.append([UInt8(i), 0])
+                }
             }
             
             //checking columns
             if cells[2][i] == .nobody && cells[0][i] != .nobody && cells[0][i] == cells[1][i] {
-                cells[2][i] = .computer
-                return
+                if cells[0][i] == .computer {
+                    cells[2][i] = .computer
+                    return
+                } else {
+                    placesToStop.append([2, UInt8(i)])
+                }
             }
             if cells[1][i] == .nobody && cells[0][i] != .nobody && cells[0][i] == cells[2][i] {
-                cells[1][i] = .computer
-                return
+                if cells[0][i] == .computer {
+                    cells[1][i] = .computer
+                    return
+                } else {
+                    placesToStop.append([1, UInt8(i)])
+                }
             }
             if cells[0][i] == .nobody && cells[1][i] != .nobody && cells[1][i] == cells[2][i] {
-                cells[0][i] = .computer
-                return
+                if cells[1][i] == .computer {
+                    cells[0][i] = .computer
+                    return
+                } else {
+                    placesToStop.append([0, UInt8(i)])
+                }
             }
         }
         //checking main diagonal
         if cells[2][2] == .nobody && cells[0][0] != .nobody && cells[0][0] == cells[1][1] {
-            cells[2][2] = .computer
-            return
+            if cells[0][0] == .computer {
+                cells[2][2] = .computer
+                return
+            } else {
+                placesToStop.append([2, 2])
+            }
         }
         if cells[1][1] == .nobody && cells[0][0] != .nobody && cells[0][0] == cells[2][2] {
-            cells[1][1] = .computer
-            return
+            if cells[0][0] == .computer {
+                cells[1][1] = .computer
+                return
+            } else {
+                placesToStop.append([1, 1])
+            }
         }
         if cells[0][0] == .nobody && cells[1][1] != .nobody && cells[1][1] == cells[2][2] {
-            cells[0][0] = .computer
-            return
+            if cells[1][1] == .computer {
+                cells[0][0] = .computer
+                return
+            } else {
+                placesToStop.append([0, 0])
+            }
         }
         //checking another diagonal
         if cells[2][0] == .nobody && cells[0][2] != .nobody && cells[0][2] == cells[1][1] {
-            cells[2][0] = .computer
-            return
+            if cells[0][2] == .computer {
+                cells[2][0] = .computer
+                return
+            } else {
+                placesToStop.append([2, 0])
+            }
         }
         if cells[1][1] == .nobody && cells[0][2] != .nobody && cells[0][2] == cells[2][0] {
-            cells[1][1] = .computer
-            return
+            if cells[0][2] == .computer {
+                cells[1][1] = .computer
+                return
+            } else {
+                placesToStop.append([1, 1])
+            }
         }
-        if cells[2][0] == .nobody && cells[0][2] != .nobody && cells[0][2] == cells[1][1] {
-            cells[2][0] = .computer
+        if cells[0][2] == .nobody && cells[1][1] != .nobody && cells[1][1] == cells[2][0] {
+            if cells[1][1] == .computer {
+                cells[0][2] = .computer
+                return
+            } else {
+                placesToStop.append([0, 2])
+            }
+        }
+        
+        if placesToStop.count > 0 {
+            cells[Int(placesToStop[0][0])][Int(placesToStop[0][1])] = .computer
             return
         }
         
